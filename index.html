@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="keywords" content="remark,remarkjs,markdown,slideshow,presentation" />
+    <meta name="description" content="A simple, in-browser, markdown-driven slideshow tool." />
+    <title>What the Flux?</title>
+    <style type="text/css">
+      @import url(http://fonts.googleapis.com/css?family=Droid+Serif);
+      @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(http://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+      body {
+        font-family: 'Droid Serif';
+      }
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: 400;
+        margin-bottom: 0;
+      }
+      .remark-slide-content h1 { font-size: 3em; }
+      .remark-slide-content h2 { font-size: 2em; }
+      .remark-slide-content h3 { font-size: 1.6em; }
+      .footnote {
+        position: absolute;
+        bottom: 3em;
+        right: 3em;
+      }
+      .remark-slide-number {
+        left: 3em;
+        bottom: 3em;
+        text-align: left;
+        display: none;
+      }
+      .justified {
+        text-align: justify! important;
+      }
+      li p { line-height: 1.25em; }
+      .red { color: #fa0000; }
+      .large { font-size: 2em; }
+      a, a > code {
+        color: rgb(249, 38, 114);
+        text-decoration: none;
+      }
+      code {
+        background: #e7e8e2;
+        border-radius: 5px;
+      }
+      .img-code {
+        display: block;
+        background: #000001;
+        border-radius: 5px;
+        overflow: hidden;
+      }
+      .img-code img {
+        max-width: 100%;
+      }
+      blockquote {
+        background: #e7e8e2;
+        border-radius: 5px;
+        padding: 20px;
+      }
+      p > img {
+        max-width: 90%;
+      }
+      .inverse blockquote {
+        color: #272822;
+        line-height: 2em;
+      }
+      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+      .remark-code-line-highlighted     { background-color: #373832; }
+      .pull-left {
+        float: left;
+        width: 47%;
+      }
+      .pull-right {
+        float: right;
+        width: 47%;
+      }
+      .pull-right ~ p {
+        clear: both;
+      }
+      #slideshow .slide .content code {
+        font-size: 0.8em;
+      }
+      #slideshow .slide .content pre code {
+        font-size: 0.9em;
+        padding: 15px;
+      }
+      .inverse {
+        background: #272822;
+        background-repeat: no-repeat;
+        color: #AAABA4;
+        text-shadow: 0 0 20px #333;
+      }
+      .twocols-inverse{
+        background: #272822;
+        color: #AAABA4;
+      }
+      .inverse h1, .inverse h2 {
+        color: #f3f3f3;
+        line-height: 0.8em;
+      }
+
+      /* Slide-specific styling */
+      #slide-inverse .footnote {
+        bottom: 12px;
+        left: 20px;
+      }
+      .footnote.preintro {
+        bottom: 20px !important;
+        right: 0;
+        left: 0;
+        text-align: center;
+      }
+      #slide-how .slides {
+        font-size: 0.9em;
+        position: absolute;
+        top:  151px;
+        right: 140px;
+      }
+      #slide-how .slides h3 {
+        margin-top: 0.2em;
+      }
+      #slide-how .slides .first, #slide-how .slides .second {
+        padding: 1px 20px;
+        height: 90px;
+        width: 120px;
+        -moz-box-shadow: 0 0 10px #777;
+        -webkit-box-shadow: 0 0 10px #777;
+        box-shadow: 0 0 10px #777;
+      }
+      #slide-how .slides .first {
+        background: #fff;
+        position: absolute;
+        top: 20%;
+        left: 20%;
+        z-index: 1;
+      }
+      #slide-how .slides .second {
+        position: relative;
+        background: #fff;
+        z-index: 0;
+      }
+
+      /* Two-column layout */
+      .left-column {
+        color: #777;
+        width: 20%;
+        height: 92%;
+        float: left;
+      }
+        .left-column h2:last-of-type, .left-column h3:last-child {
+          color: #000;
+        }
+        .twocols-inverse .left-column {
+          color: #666;
+        }
+        .twocols-inverse .left-column h2:last-of-type, .twocols-inverse .left-column h3:last-child {
+          color: #f3f3f3;
+        }
+      .right-column {
+        width: 75%;
+        float: right;
+        display: table;
+        table-layout: fixed;
+        height: 100%;
+      }
+      .right-column .middle {
+        display: table-cell;
+        vertical-align: middle;
+      }
+      .center .left {
+        display: inline-block;
+      }
+      .alone h1 {
+        margin: none;
+        padding: none;
+      }
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle
+background-image: url(img/mire.jpg)
+.footnote.preintro[Connection to projector seems good, we can start]
+---
+name: inverse
+layout: true
+class: inverse
+---
+class: center, middle
+
+#What the Flux?
+.footnote[Seriously?]
+---
+class: center
+# Presentation in 3 parts:
+.left[
+<br/><br/>
+##I. Theory
+<br/><br/>
+##II. Practice
+<br/><br/>
+##III. “Flux-react”
+]
+.footnote[Part I and II are (very) highly inspired by a [blog post by Jonathan Creamer](http://jonathancreamer.com/what-the-flux/)]
+---
+class: center, middle
+# I. Theory
+---
+class: center, middle
+
+#“Flux”, a <u>concept</u> from Facebook
+.footnote[Boooh, bad guys. But they made React.]
+---
+class: center, middle
+
+## “Application <u>Architecture</u> for Building User Interfaces”
+.footnote[For React. Or not]
+---
+class: center, middle
+
+## Some excerpts...
+.footnote[Read them. No, I'm kidding ;)]
+---
+class: justified, middle
+
+> “Flux applications have three major parts: the dispatcher, the stores, and the views (React components).”
+
+.footnote[Even my child could understand this one]
+---
+class: justified, middle
+
+> “These should not be confused with Model-View-Controller. Controllers do exist in a Flux application, but they are controller-views — views often found at the top of the hierarchy that retrieve data from the stores and pass this data down to their children.”
+
+.footnote[Even mYk has to read it again]
+---
+class: justified, middle
+
+> “Additionally, action creators — dispatcher helper methods — are used to support a semantic API that describes all changes that are possible in the application.”
+
+.footnote[Seriously, make an effort]
+---
+class: justified, middle
+
+> “Flux eschews MVC in favor of a unidirectional data flow.”
+
+.footnote[Understood?]
+---
+class: justified, middle
+
+> When a user interacts with a React view, the view propagates an action through a central dispatcher, to the various stores that hold the application's data and business logic, which updates all of the views that are affected.
+
+.footnote[Is everything clear?]
+---
+class: center, middle
+
+![Default-aligned image](img/flip-table.gif)
+---
+class: center, middle
+
+## OK, maybe with a diagram
+.footnote[Hold on...]
+---
+class: center, middle
+background-image: url(img/flux-diagram.png)
+---
+class: center, middle
+
+![Default-aligned image](img/scared.gif)
+---
+class: center, middle
+
+## Let's rework a little
+.footnote[It's all about some stuff]
+---
+class: center, middle
+
+background-image: url(img/flux-diagram-easy.jpg)
+---
+class: center, middle
+
+background-image: url(img/flux-diagram.png)
+---
+class: center, middle
+
+background-image: url(img/flux-diagram-easy.jpg)
+---
+class: center, middle
+
+background-image: url(img/flux-diagram.png)
+---
+class: center, middle
+# II. Practice
+<br/><br/>
+## Let's break this all down...
+.footnote[Oh yes daddy, show us some code!]
+---
+class: center, middle
+
+# Think “EVENTS”
+.footnote[Or dispatcher, ... It's how everything happen]
+---
+class: twocols-inverse
+layout: false
+.left-column[
+  ## View
+]
+.right-column[.middle[.center.alone[
+# Show some stuff
+]]]
+---
+.left-column[
+  ## View
+  .detail[Show some stuff]
+]
+
+.right-column[
+.middle[.img-code[![Default-aligned image](img/code1.png)]]
+]
+---
+.left-column[
+  ## View
+  .detail[Show some stuff]
+]
+
+.right-column[
+.middle[.img-code[![Default-aligned image](img/code1-annoted1.png)]]
+]
+---
+.left-column[
+  ## View
+  .detail[Show some stuff]
+]
+
+.right-column[
+.middle[.img-code[![Default-aligned image](img/code1-annoted2.png)]]
+]
+---
+.left-column[
+  ## View
+  .detail[Show some stuff]
+]
+
+.right-column[
+.middle[.img-code[![Default-aligned image](img/code1-annoted3.png)]]
+]
+---
+class: twocols-inverse
+.left-column[
+  ## View
+  ## Action Creators
+]
+.right-column[.middle[.center.alone[
+# Go get some more stuff
+]]]
+---
+.left-column[
+  ## View
+  ## Action Creators
+  .detail[Go get some more stuff]
+]
+
+.right-column[.middle[
+### - What's the main purpose in life of an "action creator"?
+###       - *To create actions?*
+### - Yes
+###       - *It was hard!*
+### - I know
+###       - *...*
+### - But note that "creating" an action, is actually doing it
+###       - *Kill me*
+]]
+---
+class: twocols-inverse
+.left-column[
+  ## View
+  ## Action Creators
+  ## Actions
+]
+.right-column[.middle[.center.alone[
+# Do something with stuff
+]]]
+---
+.left-column[
+  ## View
+  ## Action Creators
+  ## Actions
+  .detail[Do something with stuff]
+]
+
+.right-column[
+## Define allowed actions
+.img-code[![Default-aligned image](img/code2.png)]
+]
+---
+.left-column[
+  ## View
+  ## Action Creators
+  ## Actions
+  .detail[Do something with stuff]
+]
+.right-column[
+## Define the actions
+.img-code[![Default-aligned image](img/code3.png)]
+]
+---
+.left-column[
+  ## View
+  ## Action Creators
+  ## Actions
+  .detail[Do something with stuff]
+]
+.right-column[
+## Define the actions
+.img-code[![Default-aligned image](img/code3-annoted1.png)]
+]
+---
+.left-column[
+  ## View
+  ## Action Creators
+  ## Actions
+  .detail[Do something with stuff]
+]
+.right-column[
+## Define the actions
+.img-code[![Default-aligned image](img/code3-annoted3.png)]
+]
+---
+.left-column[
+  ## View
+  ## Action Creators
+  ## Actions
+  .detail[Do something with stuff]
+]
+.right-column[
+## Define the actions
+.img-code[![Default-aligned image](img/code3-annoted2.png)]
+]
+---
+.left-column[
+  ## View
+  ## Action Creators
+  ## Actions
+  .detail[Do something with stuff]
+]
+.right-column[
+## Actually do something
+.img-code[![Default-aligned image](img/code4.png)]
+]
+---
+.left-column[
+  ## View
+  ## Action Creators
+  ## Actions
+  .detail[Do something with stuff]
+]
+.right-column[
+## Define the actions
+.img-code[![Default-aligned image](img/code4-annoted1.png)]
+]
+---
+.left-column[
+  ## View
+  ## Action Creators
+  ## Actions
+  .detail[Do something with stuff]
+]
+.right-column[
+## Define the actions
+.img-code[![Default-aligned image](img/code4-annoted2.png)]
+]
+---
+class: twocols-inverse
+.left-column[
+  ## View
+  ## Action Creators
+  ## Actions
+  ## Dispatcher
+]
+.right-column[.middle[.center.alone[
+# Hey Everyone! There's new stuff!
+]]]
+---
+.left-column[
+  ## View
+  ## Action Creators
+  ## Actions
+  ## Dispatcher
+  .detail[Hey Everyone! There's new stuff!]
+]
+
+.right-column[
+.middle[.img-code[![Default-aligned image](img/code5.png)]]
+]
+---
+.left-column[
+  ## View
+  ## Action Creators
+  ## Actions
+  ## Dispatcher
+  .detail[Hey Everyone! There's new stuff!]
+]
+
+.right-column[
+.middle[.img-code[![Default-aligned image](img/code5-annoted1.png)]]
+]
+---
+.left-column[
+  ## View
+  ## Action Creators
+  ## Actions
+  ## Dispatcher
+  .detail[Hey Everyone! There's new stuff!]
+]
+
+.right-column[
+.middle[.img-code[![Default-aligned image](img/code5-annoted2.png)]]
+]
+---
+.left-column[
+  ## View
+  ## Action Creators
+  ## Actions
+  ## Dispatcher
+  .detail[Hey Everyone! There's new stuff!]
+]
+
+.right-column[
+.middle[.img-code[![Default-aligned image](img/code5-annoted3.png)]]
+]
+---
+class: twocols-inverse
+.left-column[
+  ## View
+  ## Action Creators
+  ## Actions
+  ## Dispatcher
+  ## Store
+]
+.right-column[.middle[.center.alone[
+# Keep track of stuff
+]]]
+---
+.left-column[
+  ## View
+  ## Action Creators
+  ## Actions
+  ## Dispatcher
+  ## Store
+  .detail[Keep track of stuff]
+]
+
+.right-column[
+## Main points:
+
+<br />
+> “Stores hold application state and business logic”
+
+<br />
+
+> “Stores are also emitters”
+]
+---
+.left-column[
+  ## View
+  ## Action Creators
+  ## Actions
+  ## Dispatcher
+  ## Store
+  .detail[Keep track of stuff]
+]
+
+.right-column[
+.middle[.img-code[![Default-aligned image](img/code6.png)]]
+]
+---
+.left-column[
+  ## View
+  ## Action Creators
+  ## Actions
+  ## Dispatcher
+  ## Store
+  .detail[Keep track of stuff]
+]
+
+.right-column[
+.middle[.img-code[![Default-aligned image](img/code6-annoted1.png)]]
+]
+---
+.left-column[
+  ## View
+  ## Action Creators
+  ## Actions
+  ## Dispatcher
+  ## Store
+  .detail[Keep track of stuff]
+]
+
+.right-column[
+.middle[.img-code[![Default-aligned image](img/code6-annoted2.png)]]
+]
+---
+.left-column[
+  ## View
+  ## Action Creators
+  ## Actions
+  ## Dispatcher
+  ## Store
+  .detail[Keep track of stuff]
+]
+
+.right-column[
+.middle[.img-code[![Default-aligned image](img/code6-annoted3.png)]]
+]
+---
+.left-column[
+  ## View
+  ## Action Creators
+  ## Actions
+  ## Dispatcher
+  ## Store
+  .detail[Keep track of stuff]
+]
+
+.right-column[
+.middle[.img-code[![Default-aligned image](img/code7.png)]]
+]
+---
+.left-column[
+  ## View
+  ## Action Creators
+  ## Actions
+  ## Dispatcher
+  ## Store
+  .detail[Keep track of stuff]
+]
+
+.right-column[
+.middle[.img-code[![Default-aligned image](img/code7-annoted1.png)]]
+]
+---
+.left-column[
+  ## View
+  ## Action Creators
+  ## Actions
+  ## Dispatcher
+  ## Store
+  .detail[Keep track of stuff]
+]
+
+.right-column[
+.middle[.img-code[![Default-aligned image](img/code7-annoted2.png)]]
+]
+---
+.left-column[
+  ## View
+  ## Action Creators
+  ## Actions
+  ## Dispatcher
+  ## Store
+  .detail[Keep track of stuff]
+]
+
+.right-column[
+.middle[.img-code[![Default-aligned image](img/code7-annoted3.png)]]
+]
+---
+class: twocols-inverse
+.left-column[
+  ## View
+  ## Action Creators
+  ## Actions
+  ## Dispatcher
+  ## Store
+  ## View, again
+  .detail[It's a loop, remember]
+]
+.right-column[.middle[.center.alone[
+# Change events
+]]]
+
+---
+.left-column[
+  ## View
+  ## Action Creators
+  ## Actions
+  ## Dispatcher
+  ## Store
+  ## View
+  .detail[Change events]
+]
+
+.right-column[
+.middle[.img-code[![Default-aligned image](img/code8.png)]]
+]
+---
+.left-column[
+  ## View
+  ## Action Creators
+  ## Actions
+  ## Dispatcher
+  ## Store
+  ## View
+  .detail[Change events]
+]
+
+.right-column[
+.middle[.img-code[![Default-aligned image](img/code8-annoted1.png)]]
+]
+---
+.left-column[
+  ## View
+  ## Action Creators
+  ## Actions
+  ## Dispatcher
+  ## Store
+  ## View
+  .detail[Change events]
+]
+
+.right-column[
+.middle[.img-code[![Default-aligned image](img/code8-annoted2.png)]]
+]
+---
+class: inverse, center
+
+#Summary
+<br />
+
+.left[
+&nbsp; &nbsp; View renders
+
+↪ Click triggers action creator
+
+↪ Go get data
+
+↪ Create action for received data
+
+↪ Send action to dispatcher
+
+↪ Dispatcher publishes action
+
+↪ Store listens for action
+
+↪ Store updates state
+
+↪ View updates
+]
+---
+class: center, middle
+background-image: url(img/please-simple.jpg)
+---
+class: inverse, center, middle
+#III. Introducing “flux-react”
+.footnote[by [Christian Alfoni](https://github.com/christianalfoni/flux-react/)]
+---
+class: inverse, center
+#Same concepts, but takes care of the dispatcher for you, so:
+<br/>
+.left[
+<br/>
+<br/>
+- less code
+<br/>
+<br/>
+- less repetitions
+<br/>
+<br/>
+- better view of the whole process
+]
+---
+class: inverse, center, middle
+
+# Same example
+.footnote[MOAR CODE!]
+---
+class: twocols-inverse
+.left-column[
+  ## Actions
+]
+.right-column[.middle[.center.alone[
+# What stuff we can do
+]]]
+---
+.left-column[
+  ## Actions
+  .detail[What stuff we can do]
+]
+
+.right-column[
+.middle[.img-code[![Default-aligned image](img/code9.png)]]
+]
+---
+.left-column[
+  ## Actions
+  .detail[What stuff we can do]
+]
+
+.right-column[
+.middle[.img-code[![Default-aligned image](img/code9-annoted1.png)]]
+]
+---
+class: twocols-inverse
+.left-column[
+  ## Actions
+  ## Store
+]
+.right-column[.middle[.center.alone[
+# Work on stuff
+]]]
+---
+.left-column[
+  ## Actions
+  ## Store
+  .detail[Work on stuff]
+]
+
+.right-column[
+.middle[.img-code[![Default-aligned image](img/code10.png)]]
+]
+---
+.left-column[
+  ## Actions
+  ## Store
+  .detail[Work on stuff]
+]
+
+.right-column[
+.middle[.img-code[![Default-aligned image](img/code10-annoted1.png)]]
+]
+---
+.left-column[
+  ## Actions
+  ## Store
+  .detail[Work on stuff]
+]
+
+.right-column[
+.middle[.img-code[![Default-aligned image](img/code10-annoted2.png)]]
+]
+---
+.left-column[
+  ## Actions
+  ## Store
+  .detail[Work on stuff]
+]
+
+.right-column[
+.middle[.img-code[![Default-aligned image](img/code10-annoted3.png)]]
+]
+---
+.left-column[
+  ## Actions
+  ## Store
+  .detail[Work on stuff]
+]
+
+.right-column[
+.middle[.img-code[![Default-aligned image](img/code10-annoted4.png)]]
+]
+---
+.left-column[
+  ## Actions
+  ## Store
+  .detail[Work on stuff]
+]
+
+.right-column[
+.middle[.img-code[![Default-aligned image](img/code10-annoted5.png)]]
+]
+---
+class: twocols-inverse
+.left-column[
+  ## Actions
+  ## Store
+  ## View
+]
+.right-column[.middle[.center.alone[
+# Show some stuff
+]]]
+---
+.left-column[
+  ## Actions
+  ## Store
+  ## View
+  .detail[Show some stuff]
+]
+
+.right-column[
+.middle[.img-code[![Default-aligned image](img/code11.png)]]
+]
+---
+.left-column[
+  ## Actions
+  ## Store
+  ## View
+  .detail[Show some stuff]
+]
+
+.right-column[
+.middle[.img-code[![Default-aligned image](img/code11-annoted1.png)]]
+]
+---
+.left-column[
+  ## Actions
+  ## Store
+  ## View
+  .detail[Show some stuff]
+]
+
+.right-column[
+.middle[.img-code[![Default-aligned image](img/code11-annoted2.png)]]
+]
+---
+class: inverse, center
+
+# I'm done
+<br/>
+## How do you feel?
+<br/><br/>
+.pull-left[
+Good...
+![Default-aligned image](img/its-ok.gif)
+]
+
+.pull-right[
+Or still...
+![Default-aligned image](img/its-not-ok.gif)
+]
+
+---
+class: inverse, center, middle
+
+# THANK YOU!
+.footnote[&nbsp;]
+---
+class: inverse, center, middle
+
+# THANK YOU!
+.footnote[Yes Lucas, I love you too]
+---
+class: inverse, center, middle
+
+# THANK YOU!
+.footnote[And the others too, meh!]
+---
+class: center, middle
+background-image: url(img/mire.jpg)
+.footnote.preintro[Signal lost...]
+
+    </textarea>
+    <script src="js/remark-latest.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      var hljs = remark.highlighter.engine;
+    </script>
+    <script src="js/remark.language.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      var slideshow = remark.create({
+          highlightStyle: 'monokai',
+          highlightLanguage: 'remark'
+        }) ;
+    </script>
+  </body>
+</html>
